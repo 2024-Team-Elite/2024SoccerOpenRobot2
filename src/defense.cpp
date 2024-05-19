@@ -11,7 +11,7 @@ int Defense::defenseCalc(int ballAngle, int goalAngle)
     {
         angleDiff = 360 - angleDiff;
     }
-    if (angleDiff <= 180 && angleDiff > 168)
+    if (angleDiff <= 180 && angleDiff > 160)
     {
         defenseAngle = -1;
     }
@@ -27,16 +27,23 @@ int Defense::defenseCalc(int ballAngle, int goalAngle)
             defenseAngle = calculation.projectionCalc(0, defenseAngle);
         }
     }
+    Serial.print("defense Angle: ");
+    Serial.println(defenseAngle);
     return defenseAngle;
 }
 
-int Defense::defenseOrientation(int ballAngle, int orientation, int initialOrientation)
+int Defense::defenseOrientation(int goalAngle, int orientation, int initialOrientation)
 {
-    if (ballAngle > 180)
-    {
-        ballAngle -= 360;
+    goalAngle = calculation.complimentaryFilter(goalAngle, previousGoalAngle);
+    goalAngle += 180;
+    if(goalAngle > 360){
+        goalAngle -= 360;
     }
-    theoreticalDir = orientation + ballAngle;
+    if (goalAngle > 180)
+    {
+        goalAngle -= 360;
+    }
+    theoreticalDir = orientation + goalAngle;
     if (theoreticalDir >= 360)
     {
         theoreticalDir -= 360;
@@ -55,5 +62,6 @@ int Defense::defenseOrientation(int ballAngle, int orientation, int initialOrien
     {
         return initialOrientation;
     }
+    previousGoalAngle = goalAngle;
     return theoreticalDir;
 }

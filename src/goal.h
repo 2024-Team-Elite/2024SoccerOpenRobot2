@@ -5,12 +5,13 @@
 #include <elapsedMillis.h>
 #include <switches.h>
 #include <ultrasonic.h>
+#include <calculation.h>
 class Goal
 {
 public:
     Goal();
     int scoreOrientation(int orientation, int goalAngle, int initialOrientation);
-    void kickAllowed();
+    void kickAllowed(int y);
     void kickBackground();
 
 private:
@@ -21,6 +22,8 @@ private:
     Switch switches;
     Ultrasonic ultrasonic;
     void kick();
+    int previousScoreAngle;
+    Calculation calculation;
 };
 
 #endif
